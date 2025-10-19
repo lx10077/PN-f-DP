@@ -110,7 +110,6 @@ All parameters are configurable in **`main.py`**, and results are saved in the s
 
 Our experiments demonstrate that:
 - $f$-DP provides a tighter characterization of privacy amplification in decentralized settings.  
-- DECOR achieves improved accuracy at the same privacy budget compared with standard DP-SGD.  
 - Theoretical findings are validated across logistic regression and MNIST benchmarks.  
 
 ---
