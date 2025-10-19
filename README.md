@@ -1,107 +1,123 @@
-# Mitigating Privacy–Utility Trade-off in Decentralized Federated Learning via *f*-Differential Privacy
+# Mitigating Privacy–Utility Trade-off in Decentralized Federated Learning via $f$-Differential Privacy
 
-**NeurIPS 2025 (Spotlight Paper)**  
-**Authors:** Xiang Li\*, Buxin Su\*, Chendi Wang†, Qi Long†, Weijie Su†  
-(\*Equal contribution, †Corresponding authors)
+### 🏆 NeurIPS 2025 · Spotlight Paper
+
+**Authors:**  
+Xiang Li* · Buxin Su* · Chendi Wang† · Qi Long† · Weijie Su†  
+(*Equal contribution · †Corresponding authors)
 
 ---
 
 ## Overview
 
-This repository contains the source code and experiment scripts for our NeurIPS 2025 Spotlight paper,  
-**“Mitigating Privacy–Utility Trade-off in Decentralized Federated Learning via *f*-Differential Privacy.”**
+This repository provides the official implementation and experiment scripts for our NeurIPS 2025 Spotlight paper:
 
-The paper proposes a unified framework for analyzing and improving privacy–utility trade-offs in decentralized federated learning.  
-We introduce a new *f*-differential privacy formulation that generalizes RDP/GDP analysis and supports both independent and correlated noise mechanisms.  
+> **Mitigating Privacy–Utility Trade-off in Decentralized Federated Learning via $f$-Differential Privacy**
 
-This repository includes **four sets of experiments**, corresponding to the main sections in our paper.
+We introduced two new differential privacy notions for decentralized federated learning: PN-$f$-DP and Sec-$f$-LDP, extending the $f$-DP framework to settings with independent and correlated noise, respectively. These enable tighter and composable privacy analysis for various decentralized protocols. We bridge theoretical guarantees and practical algorithms through four sets of experiments covering both independent and correlated noise mechanisms.
 
 ---
 
-## Part 1: Decentralized Graphs and Privacy Computation
+## 📘 Contents
 
-To compute privacy levels over decentralized communication graphs, simply run  
+1. **Part 1** – Decentralized Graphs and Privacy Computation  
+2. **Part 2** – Private Logistic Regression  
+3. **Part 3** – Private Neural Network Classification on MNIST  
+4. **Part 4** – Decentralized Learning with Correlated Noise (DECOR)
+
+Each part corresponds to a component of our experimental study and can be run independently.
+
+---
+
+## 🧩 Part 1: Decentralized Graphs and Privacy Computation
+
+Compute privacy levels across decentralized communication graphs with:
 ```bash
+cd syhthetic_graph
 python main.py
 ```
 
-The script will generate several types of graphs (e.g., hypercube, regular, cliques) and compute the corresponding privacy matrices.  
-You can adjust hyperparameters such as  
+This generates several topologies (e.g., hypercube, regular, clique) and computes corresponding matrices of pairwise privacy budgets.  
+You can adjust parameters such as:
 - `sigma`: noise level  
 - `delta`: privacy parameter  
 - `T`: number of iterations  
 - `c`: contraction coefficient  
 
-directly in **`main.py`**.
-
-The computed results and plots will be saved automatically in the `result/` and `fig/` folders.
+Results and visualizations are saved automatically under `result/` and `fig/`.
 
 ---
 
-## Part 2: Private Logistic Regression
+## 🧮 Part 2: Private Logistic Regression
 
-To run private logistic regression on the given dataset, execute  
+Run differentially private logistic regression using:
 ```bash
+cd private_logistic_reg
 python main.py
 ```
 
-This script trains a differentially private logistic regression model and evaluates its performance.  
-You can modify hyperparameters such as  
-- `dataset`: dataset name (e.g., `"Houses"`)  
+This experiment evaluates privacy–utility trade-offs on tabular datasets.  
+Configurable hyperparameters include:
+- `dataset`: dataset name (e.g., "Houses")  
 - `sigma`: noise scale for DP-SGD  
 - `eps_tot`, `delta`: target privacy levels  
 - `n_iter`: number of training iterations  
 
-directly in **`main.py`**.
-
-The results, including model accuracy and privacy accounting summaries, will be displayed in the console.
+Performance metrics and privacy accounting results are displayed in the console.
 
 ---
 
-## Part 3: Private Neural Network Classification on MNIST
+## 🧠 Part 3: Private Neural Network Classification on MNIST
 
-To train a private neural network classifier on the MNIST dataset, simply run  
+Train a private neural network under DP-SGD using:
 ```bash
-python main_image.py
-```
-
-This script performs differentially private training using DP-SGD on MNIST.  
-You can modify hyperparameters such as  
-- `sigma`: noise scale for differential privacy  
-- `lr`: learning rate  
-- `batch_size`: minibatch size  
-- `n_iter`: number of training iterations  
-
-directly in **`main_image.py`**.
-
-The trained model and evaluation metrics will be automatically saved in the results directory.
-
----
-
-## Part 4: Decentralized Learning with Correlated Noise (DECOR)
-
-To train models under correlated-noise differential privacy (DECOR), simply run  
-```bash
+cd private_classificaition
 python main.py
 ```
 
-This script implements the **DECOR algorithm**, which extends decentralized SGD by introducing *pairwise correlated Gaussian noise* among devices.  
-While previous experiments use independent noise for each device, DECOR allows users to exchange random seeds and generate *pairwise-canceling correlated noise*, improving privacy–utility trade-offs.
+Adjustable parameters:
+- `sigma`: DP noise scale  
+- `lr`: learning rate  
+- `batch_size`: minibatch size  
+- `n_iter`: number of iterations  
 
-Key hyperparameters include  
-- `sigma`: standard deviation for independent noise  
-- `sigma_cor`: correlated noise scale  
-- `topology_name`: network structure (e.g., `ring`, `grid`, `fully_connected`)  
-- `num_iter`, `num_nodes`, `learning_rate`, `gradient_clip`  
-
-All can be modified in **`main.py`**.  
-Results, including accuracy and privacy metrics, will be stored in the results directory.
+The trained model and evaluation results are automatically saved in the output directory.
 
 ---
 
-## Citation
+## 🔗 Part 4: Decentralized Learning with Correlated Noise (DECOR)
 
-If you find this work useful, please cite:
+To run our proposed correlated-noise decentralized algorithm (DECOR):
+```bash
+cd corelated_noises
+python main.py
+```
+
+DECOR extends decentralized SGD by adding **pairwise correlated Gaussian noise** between devices.  
+This mechanism achieves stronger privacy–utility trade-offs compared to independent noise.  
+
+Key parameters:
+- `sigma`: standard deviation of independent noise  
+- `sigma_cor`: correlated noise scale  
+- `topology_name`: network structure (e.g., ring, grid, fully_connected)  
+- `num_iter`, `num_nodes`, `learning_rate`, `gradient_clip`  
+
+All parameters are configurable in **`main.py`**, and results are saved in the specified results directory.
+
+---
+
+## 📊 Results Summary
+
+Our experiments demonstrate that:
+- $f$-DP provides a tighter characterization of privacy amplification in decentralized settings.  
+- DECOR achieves improved accuracy at the same privacy budget compared with standard DP-SGD.  
+- Theoretical findings are validated across logistic regression and MNIST benchmarks.  
+
+---
+
+## 🧾 Citation
+
+If you find this repository helpful, please cite:
 
 ```bibtex
 @inproceedings{li2025mitigating,
@@ -112,3 +128,16 @@ If you find this work useful, please cite:
   note={Spotlight Paper}
 }
 ```
+
+---
+
+## 🙏 Acknowledgments
+
+Parts of the implementation build upon open-source repositories.  
+For the first three sets of experiments (privacy accounting and DP training under independent noise), we adapted code from  
+👉 [https://github.com/totilas/DPrandomwalk](https://github.com/totilas/DPrandomwalk)
+
+For the correlated-noise experiments (DECOR framework), we used and extended code from  
+👉 [https://github.com/elfirdoussilab1/DECOR](https://github.com/elfirdoussilab1/DECOR)
+
+We thank the original authors for making their implementations publicly available.
